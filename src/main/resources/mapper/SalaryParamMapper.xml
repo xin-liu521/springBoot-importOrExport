@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.velvol.dao.SalaryParamMapper">
+  <resultMap id="BaseResultMap" type="SalaryParam">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="ruleid" jdbcType="INTEGER" property="ruleid" />
+    <result column="param_code" jdbcType="VARCHAR" property="paramCode" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="interval_min" jdbcType="INTEGER" property="intervalMin" />
+    <result column="interval_max" jdbcType="INTEGER" property="intervalMax" />
+    <result column="value" jdbcType="INTEGER" property="value" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, ruleid, param_code, name, interval_min, interval_max, value, type
+  </sql>
+
+</mapper>

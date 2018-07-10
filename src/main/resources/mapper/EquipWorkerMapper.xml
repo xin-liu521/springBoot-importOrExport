@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.velvol.salary.dao.EquipWorkerMapper" >
+  <resultMap id="BaseResultMap" type="com.velvol.salary.domain.EquipWorker" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="workid" property="workid" jdbcType="VARCHAR" />
+    <result column="total" property="total" jdbcType="DOUBLE" />
+    <result column="fistprice" property="fistprice" jdbcType="DOUBLE" />
+    <result column="secondprice" property="secondprice" jdbcType="DOUBLE" />
+    <result column="fisttime" property="fisttime" jdbcType="TIMESTAMP" />
+    <result column="secondtime" property="secondtime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="addtime" property="addtime" jdbcType="TIMESTAMP" />
+    <result column="deduction" property="deduction" jdbcType="DOUBLE" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, workid, total, fistprice, secondprice, fisttime, secondtime, status, addtime, 
+    deduction, count
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from equipworker
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insert" parameterType="EquipWorker" >
+    insert into equipworker (id, workid, total, 
+      fistprice, secondprice, fisttime, 
+      secondtime, status, addtime, 
+      deduction, count)
+    values (#{id,jdbcType=INTEGER}, #{workid,jdbcType=VARCHAR}, #{total,jdbcType=DOUBLE}, 
+      #{fistprice,jdbcType=DOUBLE}, #{secondprice,jdbcType=DOUBLE}, #{fisttime,jdbcType=TIMESTAMP}, 
+      #{secondtime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{addtime,jdbcType=TIMESTAMP}, 
+      #{deduction,jdbcType=DOUBLE}, #{count,jdbcType=INTEGER})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="EquipWorker" >
+    update equipworker
+    <set >
+      <if test="workid != null" >
+        workid = #{workid,jdbcType=VARCHAR},
+      </if>
+      <if test="total != null" >
+        total = #{total,jdbcType=DOUBLE},
+      </if>
+      <if test="fistprice != null" >
+        fistprice = #{fistprice,jdbcType=DOUBLE},
+      </if>
+      <if test="secondprice != null" >
+        secondprice = #{secondprice,jdbcType=DOUBLE},
+      </if>
+      <if test="fisttime != null" >
+        fisttime = #{fisttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="secondtime != null" >
+        secondtime = #{secondtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="addtime != null" >
+        addtime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deduction != null" >
+        deduction = #{deduction,jdbcType=DOUBLE},
+      </if>
+      <if test="count != null" >
+        count = #{count,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <!--查询物料扣费信息-->
+  <select id="findById" parameterType="Integer" resultType="EquipWorker">
+    SELECT e.* FROM equipworker e LEFT JOIN worker w ON e.workid = w.id WHERE w.meituanid = #{riderId}
+  </select>
+</mapper>

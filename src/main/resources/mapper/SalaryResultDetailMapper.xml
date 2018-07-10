@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.velvol.salary.dao.SalaryResultDetailMapper" >
+  <resultMap id="BaseResultMap" type="SalaryResultDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="rider_id" property="riderId" jdbcType="VARCHAR" />
+    <result column="rider_name" property="riderName" jdbcType="VARCHAR" />
+    <result column="stataion_id" property="stataionId" jdbcType="VARCHAR" />
+    <result column="station_name" property="stationName" jdbcType="VARCHAR" />
+    <result column="total_number" property="totalNumber" jdbcType="INTEGER" />
+    <result column="system_number" property="systemNumber" jdbcType="INTEGER" />
+    <result column="adjust_number" property="adjustNumber" jdbcType="INTEGER" />
+    <result column="night_number" property="nightNumber" jdbcType="INTEGER" />
+    <result column="big_night_number" property="bigNightNumber" jdbcType="INTEGER" />
+    <result column="one_two_number" property="oneTwoNumber" jdbcType="INTEGER" />
+    <result column="greater_tow_number" property="greaterTowNumber" jdbcType="INTEGER" />
+    <result column="distance_number" property="distanceNumber" jdbcType="INTEGER" />
+    <result column="adjust_overtime_number" property="adjustOvertimeNumber" jdbcType="INTEGER" />
+    <result column="discontent_number" property="discontentNumber" jdbcType="INTEGER" />
+    <result column="base_price" property="basePrice" jdbcType="INTEGER" />
+    <result column="over_task_price" property="overTaskPrice" jdbcType="INTEGER" />
+    <result column="interval_price" property="intervalPrice" jdbcType="INTEGER" />
+    <result column="night_price" property="nightPrice" jdbcType="INTEGER" />
+    <result column="big_night_price" property="bigNightPrice" jdbcType="INTEGER" />
+    <result column="one_two_price" property="oneTwoPrice" jdbcType="INTEGER" />
+    <result column="greater_two_price" property="greaterTwoPrice" jdbcType="INTEGER" />
+    <result column="distance_price" property="distancePrice" jdbcType="INTEGER" />
+    <result column="season_price" property="seasonPrice" jdbcType="INTEGER" />
+    <result column="vehicle_price" property="vehiclePrice" jdbcType="INTEGER" />
+    <result column="meal_price" property="mealPrice" jdbcType="INTEGER" />
+    <result column="telephone_price" property="telephonePrice" jdbcType="INTEGER" />
+    <result column="live_price" property="livePrice" jdbcType="INTEGER" />
+    <result column="present_price" property="presentPrice" jdbcType="INTEGER" />
+
+    <result column="no_standard_price" property="noStandardPrice" jdbcType="INTEGER" />
+    <result column="discontent_price" property="discontent_price" jdbcType="INTEGER" />
+    <result column="cmmon_overtime_price" property="cmmonOvertimePrice" jdbcType="INTEGER" />
+    <result column="serious_overtime_price" property="seriousOvertimePrice" jdbcType="INTEGER" />
+    <result column="belate_price" property="belatePrice" jdbcType="INTEGER" />
+    <result column="absent_price" property="absentPrice" jdbcType="INTEGER" />
+    <result column="amount_price" property="amountPrice" jdbcType="INTEGER" />
+    <result column="vehicle_deduction_price" property="vehicleDeductionPrice" jdbcType="INTEGER" />
+    <result column="lastmonth_price" property="lastmonthPrice" jdbcType="INTEGER" />
+
+    <result column="beyond_task_number" property="beyondTaskNumber" jdbcType="INTEGER" />
+    <result column="no_task_base_price" property="noTaskBasePrice" jdbcType="INTEGER" />
+    <result column="lastmonth_price" property="lastmonthPrice" jdbcType="INTEGER" />
+    <result column="train_price" property="trainPrice" jdbcType="INTEGER" />
+    <result column="insurance" property="insurance" jdbcType="INTEGER" />
+    <result column="equip_use_price" property="equipUsePrice" jdbcType="INTEGER" />
+    <result column="equip_buy_price" property="equipBuyPrice" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="no_service_price" property="noServicePrice" jdbcType="INTEGER" />
+    <result column="complain_price" property="complainPrice" jdbcType="INTEGER" />
+    <result column="class_ii_complain_price" property="classIiComplainPrice" jdbcType="INTEGER" />
+    <result column="round_amount_price" property="roundAmountPrice" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, record_id, rider_id, rider_name, stataion_id, station_name, total_number, system_number, adjust_number, night_number,big_night_number,
+    one_two_number, greater_tow_number, distance_number, adjust_overtime_number,
+    discontent_number, base_price, over_task_price, interval_price, night_price, big_night_price, one_two_price, greater_two_price,
+    distance_price, season_price, vehicle_price, meal_price, telephone_price, live_price, 
+    present_price, no_standard_price,discontent_price, cmmon_overtime_price, serious_overtime_price, belate_price, absent_price
+    , amount_price, vehicle_deduction_price, beyond_task_number, no_task_base_price, lastmonth_price, train_price, insurance, equip_use_price,
+    equip_buy_price, status, lastmonth_price, no_service_price, complain_price, class_ii_complain_price, round_amount_price
+  </sql>
+
+  <select id="queryResultDetailPage" resultType="map" parameterType="SalaryResultDetail">
+    SELECT
+    s.*,u.entry_time,u.resign_time,u.attend_actual,u.belate,u.absent,u.rest,u.leave,u.vehicle,u.live,
+    u.subsidy_price, u.smile_action_price, u.temperature_price,u.equip_price,u.remark,
+    w.telephone,w.state,
+    o.on_time_proportion, o.complete_proportion,o.pleased_proportion,o.one_star, o.two_star,o.complain,o.class_ii_complain,
+    o.serious_overtime_number as serious_number,o.overtime_adjust_number,o.no_service_number,
+    (SELECT DISTINCT(b.cardnum) FROM bankcardinfo b  WHERE b.flag = 0 AND b.workid = w.id ) AS mainCard,
+    (SELECT DISTINCT(b.address) FROM bankcardinfo b  WHERE b.flag = 0 AND b.workid = w.id ) AS address,
+    (SELECT DISTINCT(b.ownerid) FROM bankcardinfo b  WHERE b.flag = 0 AND b.workid = w.id ) AS ownerid
+    FROM salary_result_detail s
+    LEFT JOIN worker w ON s.rider_id = w.meituanid
+    LEFT JOIN salary_order_adjust o ON s.rider_id = o.rider_id AND  o.record_id = #{recordId}
+    LEFT JOIN salary_user_info u ON s.rider_id = u.rider_id AND  u.record_id = #{recordId}
+    <where>
+      <if test="recordId != null and recordId != ''">
+        AND s.record_id = #{recordId}
+      </if>
+      <if test="riderName != null and riderName != ''">
+      and s.rider_name LIKE "%"#{riderName}"%"
+      </if>
+      <if test="stataionId != null and stataionId != ''">
+      and s.stataion_id = #{stataionId}
+      </if>
+      <if test="riderId != null and riderId != ''">
+      and s.rider_id = #{riderId}
+      </if>
+      <if test="status != null and status != ''">
+        and s.status = #{status}
+      </if>
+    </where>
+    ORDER by s.stataion_id, s.system_number DESC
+  </select>
+
+  <!--查导出信息-->
+  <select id="selectResultDetail" resultType="map" parameterType="SalaryResultDetail">
+    SELECT
+    s.*,u.entry_time,u.resign_time,u.attend_actual,u.belate,u.absent,u.rest,u.leave,u.vehicle,u.live,
+    u.subsidy_price, u.smile_action_price, u.temperature_price,u.equip_price,u.remark,
+    w.telephone,w.state,
+    o.on_time_proportion, o.complete_proportion,o.pleased_proportion,o.one_star, o.two_star,o.complain,o.class_ii_complain,
+    o.serious_overtime_number  AS serious_number,o.overtime_adjust_number,o.no_service_number,
+    (SELECT DISTINCT(b.cardnum) FROM bankcardinfo b  WHERE b.flag = 0 AND b.workid = w.id  ) AS mainCard,
+    (SELECT DISTINCT(b.address) FROM bankcardinfo b  WHERE b.flag = 0 AND b.workid = w.id  ) AS address,
+    (SELECT DISTINCT(b.ownerid) FROM bankcardinfo b  WHERE b.flag = 0 AND b.workid = w.id  ) AS ownerid
+    FROM salary_result_detail s
+    LEFT JOIN worker w ON s.rider_id = w.meituanid
+    LEFT JOIN salary_order_adjust o ON s.rider_id = o.rider_id AND  o.record_id = #{recordId}
+    LEFT JOIN salary_user_info u ON s.rider_id = u.rider_id AND  u.record_id = #{recordId}
+    <where>
+      <if test="recordId != null and recordId != ''">
+        AND s.record_id = #{recordId}
+      </if>
+      <if test="riderName != null and riderName != ''">
+        and s.rider_name LIKE "%"#{riderName}"%"
+      </if>
+      <if test="stataionId != null and stataionId != ''">
+        and s.stataion_id = #{stataionId}
+      </if>
+      <if test="riderId != null and riderId != ''">
+        and s.rider_id = #{riderId}
+      </if>
+      <if test="status != null and status != ''">
+        and s.status = #{status}
+      </if>
+    </where>
+    ORDER by s.stataion_id, s.system_number DESC
+  </select>
+
+  <!--西安工资计算-->
+  <select id="startCalculate" parameterType="Integer" resultType="java.lang.Integer">
+    <![CDATA[
+            {call salary (
+              #{recordId,mode=IN,jdbcType=INTEGER}, ''
+              )
+            }
+        ]]>
+  </select>
+
+  <!--北京工资计算-->
+  <select id="startBjCalculate" statementType="CALLABLE" parameterType="Integer" resultType="java.lang.Integer">
+    <![CDATA[
+            {call salary_bj (
+              #{recordId,mode=IN,jdbcType=INTEGER}, ''
+              )
+            }
+        ]]>
+  </select>
+
+  <!--修改发放状态-->
+  <update id="updateStatus" parameterType="SalaryResultDetail">
+    UPDATE salary_result_detail
+    SET status = #{status} WHERE id = #{id}
+  </update>
+
+  <insert id="addResultOrder" parameterType="SalaryResultDetail" >
+    INSERT INTO salary_result_detail
+    (
+    record_id,
+    rider_id,
+    rider_name,
+    stataion_id,
+    station_name,
+    amount_price
+    )VALUES (
+    #{recordId},
+    #{riderId},
+    #{riderName},
+    #{stataionId},
+    #{stationName},
+    #{amountPrice}
+    )
+  </insert>
+
+  <!--查询是否物料扣费-->
+  <select id="selectIsMaterial" parameterType="Integer" resultType="SalaryResultDetail">
+    SELECT rider_id, equip_buy_price FROM salary_result_detail WHERE record_id = #{recordId} AND equip_buy_price is NOT NULL
+  </select>
+
+
+</mapper>

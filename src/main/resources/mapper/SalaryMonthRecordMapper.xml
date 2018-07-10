@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.velvol.salary.dao.SalaryMonthRecordMapper" >
+  <resultMap id="BaseResultMap" type="SalaryMonthRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="month" property="month" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="addtime" property="addtime" jdbcType="TIMESTAMP" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="region" property="region" jdbcType="INTEGER" />
+    <result column="attend" property="attend" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, year, month, status, addtime, operator, region, attend
+  </sql>
+  <select id="queryOrderDetailPage" resultType="map" parameterType="SalaryMonthRecord" >
+    select 
+    m.*, r.name, u.username
+    from salary_month_record m LEFT JOIN region r ON m.region = r.id
+                               LEFT JOIN USER u ON m.operator = u.id
+    <where>
+      <if test="year != null" >
+        AND year = #{year,jdbcType=VARCHAR}
+      </if>
+      <if test="month != null" >
+        AND month = #{month,jdbcType=VARCHAR}
+      </if>
+      <if test="region != null and  region != ''" >
+        AND region = #{region,jdbcType=VARCHAR}
+      </if>
+      <if test="operator != null and operator != ''" >
+        AND operator  LIKE "%"#{operator}"%"
+      </if>
+    </where>
+    ORDER BY  addtime DESC
+  </select>
+
+  <insert id="addMonthRecord" parameterType="SalaryMonthRecord" >
+    insert into salary_month_record
+    (
+      year,
+      month,
+      status,
+      addtime,
+      operator,
+      region
+      )
+    values (
+      #{year,jdbcType=VARCHAR},
+      #{month,jdbcType=VARCHAR},
+      #{status,jdbcType=INTEGER},
+      #{addtime,jdbcType=TIMESTAMP},
+      #{operator,jdbcType=VARCHAR},
+      #{region,jdbcType=INTEGER}
+      )
+  </insert>
+
+  <update id="updateMonth" parameterType="SalaryMonthRecord" >
+    update salary_month_record
+    <set >
+      <if test="year != null" >
+        year = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="addtime != null" >
+        addtime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="attend != null" >
+        attend = #{attend,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateMonthRecord" parameterType="INTEGER" >
+    update salary_month_record
+    SET status = 4
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectUserById" parameterType="string" resultType="com.velvol.salary.domain.User">
+    SELECT * FROM USER WHERE id =#{id}
+  </select>
+
+  <!--查询骑手信息-->
+  <select id="selectWorkerById" parameterType="String" resultType="map">
+    SELECT * FROM worker WHERE id =#{workerId}
+  </select>
+
+  <select id="selectRegion" resultType="map">
+    SELECT * FROM region
+  </select>
+
+  <!--校验月份是否存在-->
+  <select id="isMonthRecord" parameterType="SalaryMonthRecord" resultType="Integer">
+    SELECT count(id) FROM salary_month_record
+    <where>
+      <if test="year != null" >
+        AND year = #{year,jdbcType=VARCHAR}
+      </if>
+      <if test="month != null" >
+        AND month = #{month,jdbcType=VARCHAR}
+      </if>
+      <if test="region != null" >
+        AND region = #{region,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <!--查询站点-->
+  <select id="queryStation" resultType="map" parameterType="Integer">
+    SELECT * FROM station WHERE regionid = #{regionId}
+  </select>
+
+  <!--新增站点星级-->
+  <insert id="addStationRank" parameterType="map">
+    INSERT INTO salary_station_level
+    (
+    record_id,
+    stataion_id,
+    `level`
+    ) VALUES (
+    #{recordId},
+    #{stationId},
+    #{level}
+    )
+  </insert>
+
+  <!--删除站点星级-->
+  <delete id="deleteStationLevel" parameterType="Integer">
+    DELETE FROM salary_station_level WHERE record_id =#{recordId}
+  </delete>
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.velvol.salary.dao.EquipWorksecMapper" >
+  <resultMap id="BaseResultMap" type="com.velvol.salary.domain.EquipWorksec" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="equipworkid" property="equipworkid" jdbcType="INTEGER" />
+    <result column="fee" property="fee" jdbcType="DOUBLE" />
+    <result column="kftime" property="kftime" jdbcType="TIMESTAMP" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, equipworkid, fee, kftime, username
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from equipworksec
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insert" parameterType="EquipWorksec" >
+    insert into equipworksec (equipworkid, fee,
+      kftime, username)
+    values ( #{equipworkid,jdbcType=INTEGER}, #{fee,jdbcType=DOUBLE},
+      #{kftime,jdbcType=TIMESTAMP}, #{username,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="EquipWorksec" >
+    update equipworksec
+    <set >
+      <if test="equipworkid != null" >
+        equipworkid = #{equipworkid,jdbcType=INTEGER},
+      </if>
+      <if test="fee != null" >
+        fee = #{fee,jdbcType=DOUBLE},
+      </if>
+      <if test="kftime != null" >
+        kftime = #{kftime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.velvol.salary.dao.BankcardinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.velvol.salary.domain.Bankcardinfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="workid" property="workid" jdbcType="VARCHAR" />
+    <result column="cardnum" property="cardnum" jdbcType="VARCHAR" />
+    <result column="cardholder" property="cardholder" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="relationship" property="relationship" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+    <result column="addtime" property="addtime" jdbcType="TIMESTAMP" />
+    <result column="ownerid" property="ownerid" jdbcType="VARCHAR" />
+    <result column="ownerphone" property="ownerphone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, workid, cardnum, cardholder, address, relationship, flag, addtime, ownerid, ownerphone
+  </sql>
+  <select id="queryBankInfo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    b.id, b.workid, b.cardnum, b.cardholder, b.address, b.relationship, b.flag, b.addtime, b.ownerid, b.ownerphone
+    from bankcardinfo b
+    where b.workid = #{workerId} and b.flag != 2
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from bankcardinfo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="addBankInfo" parameterType="com.velvol.salary.domain.Bankcardinfo" >
+    insert into bankcardinfo (workid, cardnum,
+      cardholder, address, relationship, 
+      flag, addtime, ownerid, 
+      ownerphone)
+    values ( #{workid,jdbcType=VARCHAR}, #{cardnum,jdbcType=VARCHAR},
+      #{cardholder,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{relationship,jdbcType=VARCHAR}, 
+      #{flag,jdbcType=INTEGER}, #{addtime,jdbcType=TIMESTAMP}, #{ownerid,jdbcType=VARCHAR}, 
+      #{ownerphone,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateBankInfo" parameterType="com.velvol.salary.domain.Bankcardinfo" >
+    update bankcardinfo
+    <set >
+      <if test="cardnum != null" >
+        cardnum = #{cardnum,jdbcType=VARCHAR},
+      </if>
+      <if test="cardholder != null" >
+        cardholder = #{cardholder,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="relationship != null" >
+        relationship = #{relationship,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="addtime != null" >
+        addtime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ownerid != null" >
+        ownerid = #{ownerid,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerphone != null" >
+        ownerphone = #{ownerphone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

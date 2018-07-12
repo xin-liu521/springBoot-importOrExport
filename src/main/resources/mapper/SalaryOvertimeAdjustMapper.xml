@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.velvol.salary.dao.SalaryOvertimeAdjustMapper" >
+  <resultMap id="BaseResultMap" type="SalaryOvertimeAdjust" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="rider_id" property="riderId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="overtime_adjust_number" property="overtimeAdjustNumber" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, record_id, order_id, rider_id, status, reason
+  </sql>
+  <select id="queryOrderTimeAdjustPage" resultMap="BaseResultMap" parameterType="SalaryOvertimeAdjust" >
+    select 
+    <include refid="Base_Column_List" />
+    from salary_overtime_adjust
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </select>
+
+
+  <insert id="insertBatch" parameterType="list" >
+    insert into salary_overtime_adjust (
+    (record_id,
+    order_id,
+    rider_id,
+    status,
+    reason
+    )
+    VALUES
+    <foreach collection="list" item="order" separator=",">
+      (#{order.recordId},
+      #{order.orderId},
+      #{order.rederId},
+      #{order.status},
+      #{order.reason}
+      )
+    </foreach>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="SalaryOvertimeAdjust" >
+    update salary_overtime_adjust
+    <set >
+      <if test="recordId != null" >
+        record_id = #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="riderId != null" >
+        rider_id = #{riderId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

@@ -1,0 +1,39 @@
+spring:
+  freemarker:
+     template-loader-path: classpath:/templates
+  mvc:
+    static-path-pattern: /static/**
+  datasource:
+    url: jdbc:mysql://39.106.140.225:3306/hrsysnewdb
+    username: roothr
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+          initial-size: 1
+          min-idle: 1
+          max-active: 10
+          validation-query: SELECT 1
+          test-while-idle: true
+          test-on-borrow: false
+          test-on-return: false
+          pool-prepared-statements: true
+          max-open-prepared-statements: 20
+          use-global-data-source-stat: true
+          stat-view-servlet:
+            enabled: true
+            login-username: xxx
+            login-password: xxx
+  http:
+    multipart:
+      max-file-size: 100Mb
+      max-request-size: 100Mb
+mybatis:
+  type-aliases-package: com.velvol.salary.domain
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    call-setters-on-nulls: true
+
+server:
+  port: 8080
+
+base64Security: XiAnWeiWo

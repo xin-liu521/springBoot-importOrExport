@@ -3,9 +3,7 @@
  * @description: 日期操作工具类
  * @version： 1.0
  */
-package com.velvol.salary.util;
-
-import org.apache.poi.ss.formula.functions.T;
+package com.velvol.hr.utils;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -660,32 +658,45 @@ public class DateUtil {
     }
 
     /**
-     * @desc 当前日期的前一天
-     * @return
+     * 获取时间段内所有的年月集合
+     *
+     * @param minDate 最小时间  2017-01
+     * @param maxDate 最大时间 2017-10
+     * @return 日期集合 格式为 年-月
+     * @throws Exception
      */
-    public static String getBeforeDay(){
-        Calendar ca = Calendar.getInstance();// 得到一个Calendar的实例
-        ca.setTime(new java.util.Date()); // 设置时间为当前时间
-        ca.add(Calendar.DATE, -1);// 日期减1
-        //Date resultDate = ca.getTime(); // 结果
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(ca.getTime());
-    }
+    public static Map<String, Object> getMonthBetween(String minDate, String maxDate) throws Exception {
+        ArrayList<String> result = new ArrayList<String>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");//格式化为年月
 
+        Calendar min = Calendar.getInstance();
+        Calendar max = Calendar.getInstance();
 
+        min.setTime(sdf.parse(minDate));
+        min.set(min.get(Calendar.YEAR), min.get(Calendar.MONTH), 1);
 
-    //java获取当前月每天的日期
-    public static List<String> getDayListOfMonth() {
-        List list = new ArrayList();
-        Calendar aCalendar = Calendar.getInstance(Locale.CHINA);
-        int year = aCalendar.get(Calendar.YEAR);//年份
-        int month = aCalendar.get(Calendar.MONTH) + 1;//月份
-        int day = aCalendar.getActualMaximum(Calendar.DATE);
-        for (int i = 1; i <= day; i++) {
-            String aDate = String.valueOf(year)+"-"+month+"-"+i;
-            list.add(aDate);
+        max.setTime(sdf.parse(maxDate));
+        max.set(max.get(Calendar.YEAR), max.get(Calendar.MONTH), 2);
+        Map<String, Object> map = new HashMap<>();
+        Calendar curr = min;
+        int index = 1;
+        while (curr.before(max)) {
+            String date = sdf.format(curr.getTime());
+            map.put("date"+ index++, date);
+            //result.add(sdf.format(curr.getTime()));
+            curr.add(Calendar.MONTH, 1);
         }
-        return list;
+        return map;
     }
 
+    public static void main(String [] ares) throws Exception{
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");//格式化为2017-10
+        Calendar calendar = Calendar.getInstance();//得到Calendar实例
+        calendar.add(Calendar.MONTH, -5);//把月份减三个月
+        java.util.Date starDate = calendar.getTime();//得到时间赋给Data
+        String stardtr = formatter.format(starDate);//使用格式化Data
+        Map<String, Object> map =  getMonthBetween(stardtr, "2018-07-10");
+
+        System.out.print(map);
+    }
 }
